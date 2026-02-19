@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HoodBin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d0d0d;--sf:#111;--b1:#1e1e1e;--b2:#2a2a2a;
+  --tx:#ccc;--dm:#555;--wh:#e8e8e8;
+  --ac:#ff4444;--gn:#44ff88;--yw:#ffcc44;--pu:#aa44ff;--or:#ff8844
+}
+body{background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;min-height:100vh}
+a{color:inherit;text-decoration:none}
+.topbar{background:#0a0a0a;border-bottom:1px solid var(--b1);height:38px;display:flex;align-items:center;padding:0 20px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-size:14px;font-weight:600;color:var(--wh);margin-right:24px;cursor:pointer}
+.topbar-nav{display:flex;flex:1}
+.tnav{height:38px;padding:0 12px;display:flex;align-items:center;font-size:12px;color:var(--dm);cursor:pointer;transition:color .15s;white-space:nowrap}
+.tnav:hover{color:var(--tx)} .tnav.active{color:var(--wh)}
+.topbar-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.onl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gn)}
+.odot{width:5px;height:5px;border-radius:50%;background:var(--gn);box-shadow:0 0 4px var(--gn);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.tlink{font-size:12px;color:var(--dm);cursor:pointer;transition:color .15s}
+.tlink:hover{color:var(--wh)}
+.hero{text-align:center;padding:28px 20px 18px;border-bottom:1px solid var(--b1)}
+.logo-wrap{position:relative;display:inline-block;margin-bottom:10px}
+.logo-img{width:240px;height:240px;object-fit:contain;display:block}
+.logo-ph{width:240px;height:240px;background:var(--sf);border:1px dashed var(--b2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:var(--dm);font-size:11px;gap:4px}
+.logo-edit{display:none;position:absolute;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center;font-size:11px;color:var(--tx);cursor:pointer}
+.logo-wrap:hover .logo-edit{display:flex}
+.site-name{font-size:13px;font-weight:600;color:var(--wh);margin-bottom:12px}
+.srch-row{display:flex;max-width:460px;margin:0 auto 10px}
+.srch-row input{flex:1;background:var(--sf);border:1px solid var(--b2);border-right:none;color:var(--wh);padding:6px 12px;font-family:'Inter',sans-serif;font-size:12px;outline:none}
+.srch-row input::placeholder{color:var(--dm)}
+.srch-row button{padding:6px 16px;background:#1a1a1a;border:1px solid var(--b2);color:var(--tx);font-size:12px;cursor:pointer}
+.srch-row button:hover{background:#222}
+.stats{font-size:11px;color:var(--dm)}
+.stats span{color:var(--tx)}
+.cats{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;padding:10px 20px;border-bottom:1px solid var(--b1)}
+.cat{font-size:11px;color:var(--dm);cursor:pointer;padding:2px 10px;border:1px solid transparent;transition:all .15s}
+.cat:hover{color:var(--tx);border-color:var(--b2)} .cat.active{color:var(--wh);border-color:#333}
+.main{max-width:1000px;margin:0 auto;padding:20px 20px 60px}
+.sec-label{font-size:11px;color:var(--dm);letter-spacing:.5px;margin-bottom:8px;padding-left:2px}
+.tbl-wrap{border:1px solid var(--b1);margin-bottom:24px}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--sf);border-bottom:1px solid var(--b1)}
+th{padding:8px 12px;text-align:left;font-size:11px;font-weight:500;color:var(--dm);letter-spacing:.3px}
+tbody tr{border-bottom:1px solid var(--b1);transition:background .1s;cursor:pointer}
+tbody tr:last-child{border-bottom:none} tbody tr:hover{background:#141414}
+td{padding:9px 12px}
+.td-t{font-size:13px;color:var(--tx);transition:color .1s}
+tbody tr:hover .td-t{color:var(--wh)}
+.badge{display:inline-block;font-size:10px;padding:1px 6px;margin-left:6px;vertical-align:middle;border:1px solid}
+.b-dox{color:#ff6666;border-color:#3a1010;background:#1a0808}
+.b-inf{color:#6699cc;border-color:#102030;background:#080f1a}
+.td-n{font-size:12px;color:var(--dm)}
+.td-d{font-size:11px;color:var(--dm);white-space:nowrap}
+.td-u{font-size:12px;font-weight:500}
+.u-a{color:var(--dm)} .u-m{color:var(--tx)} .u-v{color:var(--yw)} .u-adm{color:var(--ac)}
+.pin-row{background:#111218} .pin-row:hover{background:#14141e!important}
+.pages{display:flex;gap:3px;justify-content:center;margin-top:4px}
+.pn{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:1px solid var(--b1);background:transparent;font-size:11px;color:var(--dm);cursor:pointer;transition:all .15s}
+.pn:hover{border-color:#333;color:var(--tx)} .pn.cur{background:#1e1e1e;color:var(--wh);border-color:#333}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.modal{background:#111;border:1px solid var(--b2);width:100%;max-width:420px;margin:16px;animation:mup .18s ease;max-height:90vh;overflow-y:auto}
+.modal-lg{max-width:700px}
+@keyframes mup{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mhd{padding:12px 16px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#111;z-index:1}
+.mttl{font-size:12px;font-weight:500;color:var(--wh);letter-spacing:.3px}
+.mx{background:none;border:none;color:var(--dm);font-size:16px;cursor:pointer;line-height:1}
+.mx:hover{color:var(--tx)}
+.mbd{padding:18px 16px}
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;color:var(--dm);margin-bottom:5px;letter-spacing:.3px}
+.fi,.fs,.fta{width:100%;background:#0d0d0d;border:1px solid var(--b2);color:var(--wh);padding:8px 10px;font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .15s;resize:vertical}
+.fi:focus,.fs:focus,.fta:focus{border-color:#333}
+.fi::placeholder,.fta::placeholder{color:var(--dm)}
+.fs{cursor:pointer} .fs option{background:#111}
+.fta{font-family:monospace;font-size:12px;min-height:200px;line-height:1.6}
+.mbtn{width:100%;padding:9px;background:#1a1a1a;border:1px solid var(--b2);color:var(--wh);font-size:12px;font-weight:500;cursor:pointer;transition:background .15s;font-family:'Inter',sans-serif}
+.mbtn:hover{background:#222}
+.mbtn-red{border-color:#aa2222;color:var(--ac)} .mbtn-red:hover{background:#1a0a0a}
+.mbtn-sm{padding:6px 14px;width:auto;font-size:11px}
+.sw-link{display:block;text-align:center;font-size:11px;color:var(--dm);margin-top:12px;cursor:pointer}
+.sw-link:hover{color:var(--tx)}
+.chk-row{display:flex;align-items:center;gap:8px}
+.chk-row input{accent-color:var(--ac);cursor:pointer}
+.chk-row label{font-size:12px;color:var(--dm);cursor:pointer}
+.pmeta{display:flex;gap:16px;flex-wrap:wrap;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--b1)}
+.mk{font-size:10px;color:var(--dm);display:block;margin-bottom:3px}
+.mv{font-size:12px;color:var(--tx)}
+.pbox{background:#0d0d0d;border:1px solid var(--b1);padding:14px;font-family:monospace;font-size:12px;line-height:1.65;white-space:pre-wrap;word-break:break-word;max-height:400px;overflow-y:auto;color:var(--tx)}
+.pbox::-webkit-scrollbar{width:4px} .pbox::-webkit-scrollbar-thumb{background:var(--b2)}
+.pacts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.pbtn{padding:6px 14px;background:transparent;border:1px solid var(--b2);color:var(--dm);font-size:11px;cursor:pointer;transition:all .15s;font-family:'Inter',sans-serif}
+.pbtn:hover{border-color:#333;color:var(--tx)}
+.pbtn-del{border-color:#2a1010;color:#664444} .pbtn-del:hover{border-color:#aa2222;color:var(--ac);background:#1a0a0a}
+.charct{font-size:11px;color:var(--dm);text-align:right;margin-top:4px}
+.charct.w{color:var(--yw)} .charct.o{color:var(--ac)}
+.toast{position:fixed;bottom:20px;right:20px;background:#111;border:1px solid var(--b2);color:var(--tx);padding:9px 16px;font-size:12px;z-index:9999;animation:tin 3s forwards}
+.toast.err{border-color:#aa2222;color:var(--ac)}
+.toast.ok{border-color:#226622;color:var(--gn)}
+@keyframes tin{0%{opacity:0;transform:translateY(6px)}10%{opacity:1;transform:translateY(0)}80%{opacity:1}100%{opacity:0}}
+.adm-tag{font-size:10px;color:var(--ac);border:1px solid #aa2222;padding:1px 5px;margin-left:5px;vertical-align:middle}
+.adm-sec{background:#0f0a0a;border:1px solid #2a1010;padding:14px 16px;margin-bottom:20px}
+.adm-title{font-size:11px;color:var(--ac);margin-bottom:12px;letter-spacing:.5px}
+.adm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.adm-card{background:#0d0d0d;border:1px solid var(--b1);padding:10px 12px}
+.adm-card-k{font-size:10px;color:var(--dm);margin-bottom:4px}
+.adm-card-v{font-size:18px;color:var(--wh);font-weight:600}
+.sbadge{display:inline-block;font-size:10px;padding:1px 6px;border:1px solid;margin-left:4px;vertical-align:middle}
+.sb-ban{color:var(--ac);border-color:#aa2222;background:#1a0505}
+.sb-ok{color:var(--gn);border-color:#226622;background:#051a0a}
+.lr-login{border-left:2px solid var(--gn)!important}
+.lr-fail{border-left:2px solid var(--or)!important}
+.lr-ban{border-left:2px solid var(--ac)!important}
+.lr-paste{border-left:2px solid #4488cc!important}
+.lr-reg{border-left:2px solid var(--pu)!important}
+.tfa-digits{display:flex;gap:8px;justify-content:center;margin:16px 0}
+.tfa-digits input{width:44px;height:52px;background:#0d0d0d;border:1px solid var(--b2);color:var(--wh);font-size:22px;font-weight:600;text-align:center;outline:none;font-family:'Inter',sans-serif;transition:border-color .15s}
+.tfa-digits input:focus{border-color:#555}
+.lockscreen{position:fixed;inset:0;background:#0d0d0d;z-index:9000;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.lockscreen.gone{display:none}
+.lock-icon{font-size:48px;margin-bottom:8px}
+.lock-msg{font-size:13px;color:var(--ac);letter-spacing:.5px}
+.lock-timer{font-family:monospace;font-size:20px;color:var(--wh)}
+.prof-hd{display:flex;align-items:center;gap:20px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--b1)}
+.prof-av{width:80px;height:80px;border:1px solid var(--b2);cursor:pointer;background:var(--sf);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--dm);flex-shrink:0;overflow:hidden}
+.prof-av img{width:80px;height:80px;object-fit:cover}
+.prof-info h2{font-size:16px;font-weight:600;color:var(--wh);margin-bottom:4px}
+.prof-info p{font-size:12px;color:var(--dm)}
+.prof-tabs{display:flex;gap:0;border-bottom:1px solid var(--b1);margin-bottom:18px}
+.ptab{padding:8px 16px;font-size:12px;color:var(--dm);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.ptab:hover{color:var(--tx)} .ptab.active{color:var(--wh);border-bottom-color:var(--wh)}
+.ubadge{display:flex;align-items:center;gap:8px}
+.uav{width:28px;height:28px;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;overflow:hidden;border-radius:2px}
+.uav img{width:28px;height:28px;object-fit:cover}
+</style>
+</head>
+<body>
+<div class="lockscreen gone" id="lockScreen">
+  <div class="lock-icon">&#128274;</div>
+  <div class="lock-msg">ACESSO BLOQUEADO</div>
+  <div class="lock-timer" id="lockTimer">05:00</div>
+  <div style="font-size:11px;color:var(--dm);margin-top:8px">Aguarde o timer zerar.</div>
+</div>
+<div class="topbar">
+  <span class="topbar-logo" onclick="goHome()">HoodBin</span>
+  <div class="topbar-nav">
+    <span class="tnav active" id="na-home" onclick="goHome()">Home</span>
+    <span class="tnav" id="na-add" onclick="openAdd()">Add Paste</span>
+    <span class="tnav" id="na-users" onclick="goUsers()">Usuarios</span>
+    <span class="tnav" id="na-adm" onclick="goAdmin()" style="display:none">Admin</span>
+  </div>
+  <div class="topbar-right">
+    <div class="onl"><span class="odot"></span><span id="onl">--</span></div>
+    <div id="authBtns">
+      <span class="tlink" onclick="openModal('mLogin')">Login</span>
+      &nbsp;&middot;&nbsp;
+      <span class="tlink" onclick="openModal('mReg')">Register</span>
+    </div>
+    <div id="uArea" class="ubadge" style="display:none">
+      <div class="uav" id="uAv"><span id="uAvTx">?</span></div>
+      <span class="tlink" id="uName" onclick="openProfile()" style="color:var(--tx)"></span>
+      <span class="tlink" onclick="doLogout()">sair</span>
+    </div>
+  </div>
+</div>
+<div id="pg-home">
+  <div class="hero">
+    <div class="logo-wrap" id="logoWrap">
+      <div class="logo-ph" id="logoPh" style="display:none" onclick="triggerLogo()">Logo</div>      <img id="logoImg" class="logo-img" src="data:image/png;base64,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" style="display:block" alt="HoodBin">      <div class="logo-edit" id="logoEdit" onclick="triggerLogo()">Trocar logo</div>
+    </div>
+    <input type="file" id="logoInput" accept="image/*" onchange="onLogoUpload(event)" style="display:none">
+    <div id="uploadHint" style="display:none;font-size:11px;color:var(--dm);margin-bottom:6px">clique para trocar</div>
+    <div class="site-name" id="siteName">HoodBin</div>
+    <div class="srch-row">
+      <input id="srch" type="text" placeholder="Pesquisar paste..." oninput="doSearch()">
+      <button onclick="doSearch()">Buscar</button>
+    </div>
+    <p class="stats">Mostrando <span id="showN">0</span> (de <span id="totalN">0</span> pastes)</p>
+  </div>
+  <div class="cats">
+    <span class="cat active" data-c="all" onclick="setCat('all')">Todos</span>
+    <span class="cat" data-c="dox" onclick="setCat('dox')">Dox</span>
+    <span class="cat" data-c="info" onclick="setCat('info')">Informacao</span>
+  </div>
+  <div class="main">
+    <div class="sec-label">Pinned</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Titulo</th><th>Coments</th><th>Views</th><th>Autor</th><th>Data</th></tr></thead><tbody id="pinBody"></tbody></table></div>
+    <div class="sec-label">Pastes Recentes</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Titulo</th><th>Coments</th><th>Views</th><th>Autor</th><th>Data</th></tr></thead><tbody id="listBody"></tbody></table></div>
+    <div class="pages" id="pages"></div>
+  </div>
+</div>
+<div id="pg-users" style="display:none">
+  <div class="main" style="padding-top:24px">
+    <div class="sec-label">Usuarios Registrados</div>
+    <div class="tbl-wrap"><table><thead><tr><th>Username</th><th>Role</th><th>Pastes</th><th>Entrou</th><th>Status</th></tr></thead><tbody id="usersBody"></tbody></table></div>
+  </div>
+</div>
+<div id="pg-admin" style="display:none">
+  <div class="main" style="padding-top:24px">
+    <div class="adm-sec">
+      <div class="adm-title">VISAO GERAL</div>
+      <div class="adm-grid">
+        <div class="adm-card"><div class="adm-card-k">Pastes</div><div class="adm-card-v" id="adm-total">0</div></div>
+        <div class="adm-card"><div class="adm-card-k">Usuarios</div><div class="adm-card-v" id="adm-users">0</div></div>
+        <div class="adm-card"><div class="adm-card-k">Banidos</div><div class="adm-card-v" id="adm-banned" style="color:var(--ac)">0</div></div>
+        <div class="adm-card"><div class="adm-card-k">Online</div><div class="adm-card-v" id="adm-onl">--</div></div>
+      </div>
+    </div>
+    <div class="adm-sec">
+      <div class="adm-title">LOG DE ATIVIDADES</div>
+      <div class="tbl-wrap" style="margin-bottom:0;max-height:280px;overflow-y:auto">
+        <table><thead><tr><th>Hora</th><th>Evento</th><th>Usuario</th><th>IP</th><th>Detalhe</th></tr></thead><tbody id="logBody"></tbody></table>
+      </div>
+      <div style="margin-top:8px;text-align:right"><button class="pbtn" onclick="clearLog()">Limpar log</button></div>
+    </div>
+    <div class="adm-sec">
+      <div class="adm-title">GERENCIAR USUARIOS</div>
+      <div class="tbl-wrap" style="margin-bottom:0">
+        <table><thead><tr><th>Username</th><th>Email</th><th>Status</th><th>Falhas</th><th>Entrou</th><th>Acoes</th></tr></thead><tbody id="admUsersBody"></tbody></table>
+      </div>
+    </div>
+    <div class="adm-sec">
+      <div class="adm-title">BANIR IP</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="fi" id="banIpInput" type="text" placeholder="Ex: 192.168.1.1" style="max-width:200px">
+        <button class="mbtn mbtn-red mbtn-sm" onclick="banIPManual()">Banir IP</button>
+      </div>
+      <div style="margin-top:12px"><div class="sec-label" style="margin-bottom:6px">IPs Banidos</div><div id="bannedIPsList" style="font-size:12px;color:var(--dm);font-family:monospace"></div></div>
+    </div>
+    <div class="adm-sec">
+      <div class="adm-title">GERENCIAR PASTES</div>
+      <div class="tbl-wrap" style="margin-bottom:0"><table><thead><tr><th>Titulo</th><th>Autor</th><th>Data</th><th>Acao</th></tr></thead><tbody id="admPastesBody"></tbody></table></div>
+    </div>
+    <div class="adm-sec">
+      <div class="adm-title">CONFIGURACOES</div>
+      <div class="fg"><label class="fl">Nome do site</label><input class="fi" id="admSiteName" type="text" placeholder="HoodBin"></div>
+      <button class="mbtn" onclick="saveSiteName()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="overlay" id="mLogin">
+  <div class="modal">
+    <div class="mhd"><span class="mttl">Login</span><button class="mx" onclick="closeModal('mLogin')">&#x2715;</button></div>
+    <div class="mbd">
+      <div id="loginBlock">
+        <div class="fg"><label class="fl">Username</label><input class="fi" id="lUser" type="text" placeholder="username" autocomplete="off"></div>
+        <div class="fg"><label class="fl">Password</label><input class="fi" id="lPass" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" autocomplete="off"></div>
+        <div style="font-size:11px;color:var(--dm);margin-bottom:12px" id="loginInfo"></div>
+        <button class="mbtn" onclick="doLogin()">Entrar</button>
+        <span class="sw-link" onclick="swModal('mLogin','mReg')">Nao tem conta? Cadastre-se</span>
+      </div>
+      <div id="tfaBlock" style="display:none">
+        <div style="text-align:center;margin-bottom:12px">
+          <div style="font-size:13px;color:var(--wh);margin-bottom:4px">Verificacao Admin</div>
+          <div style="font-size:11px;color:var(--dm)">Digite o codigo de 6 digitos</div>
+        </div>
+        <div class="tfa-digits" id="tfaDigits">
+          <input type="password" maxlength="1" oninput="tfaInput(this,0)">
+          <input type="password" maxlength="1" oninput="tfaInput(this,1)">
+          <input type="password" maxlength="1" oninput="tfaInput(this,2)">
+          <input type="password" maxlength="1" oninput="tfaInput(this,3)">
+          <input type="password" maxlength="1" oninput="tfaInput(this,4)">
+          <input type="password" maxlength="1" oninput="tfaInput(this,5)">
+        </div>
+        <div style="font-size:11px;color:var(--dm);text-align:center;margin-bottom:12px" id="tfaHint">6 digitos</div>
+        <button class="mbtn" onclick="verifyTFA()">Verificar</button>
+        <button class="mbtn" style="margin-top:8px;color:var(--dm)" onclick="cancelTFA()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="overlay" id="mReg">
+  <div class="modal">
+    <div class="mhd"><span class="mttl">Cadastro</span><button class="mx" onclick="closeModal('mReg')">&#x2715;</button></div>
+    <div class="mbd">
+      <div class="fg"><label class="fl">Username</label><input class="fi" id="rUser" type="text" placeholder="3-24 chars" autocomplete="off"></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="rEmail" type="email" placeholder="email@example.com"></div>
+      <div class="fg"><label class="fl">Senha</label><input class="fi" id="rPass" type="password" placeholder="min 8 chars"></div>
+      <div class="fg"><label class="fl">Confirmar Senha</label><input class="fi" id="rPass2" type="password" placeholder="repita a senha"></div>
+      <div style="font-size:11px;margin-bottom:10px" id="pwStr"></div>
+      <button class="mbtn" onclick="doRegister()">Cadastrar</button>
+      <span class="sw-link" onclick="swModal('mReg','mLogin')">Ja tem conta? Login</span>
+    </div>
+  </div>
+</div>
+
+<!-- ADD PASTE -->
+<div class="overlay" id="mAdd">
+  <div class="modal modal-lg">
+    <div class="mhd"><span class="mttl">Novo Paste</span><button class="mx" onclick="closeModal('mAdd')">&#x2715;</button></div>
+    <div class="mbd">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="fg"><label class="fl">Titulo</label><input class="fi" id="aTitle" type="text" placeholder="Titulo do paste" maxlength="120"></div>
+        <div class="fg"><label class="fl">Categoria</label>
+          <select class="fs" id="aCat">
+            <option value="dox">Dox</option>
+            <option value="info">Informacao</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Conteudo</label>
+        <textarea class="fta" id="aContent" placeholder="Cole o conteudo aqui..." maxlength="50000" oninput="updChar()"></textarea>
+        <div class="charct" id="charct">0 / 50,000</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div class="chk-row"><input type="checkbox" id="aAnon" checked><label for="aAnon">Postar anonimamente</label></div>
+        <button class="mbtn mbtn-sm" onclick="submitPaste()">Publicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW PASTE -->
+<div class="overlay" id="mView">
+  <div class="modal modal-lg">
+    <div class="mhd"><span class="mttl" id="vTitle">PASTE</span><button class="mx" onclick="closeModal('mView')">&#x2715;</button></div>
+    <div class="mbd">
+      <div class="pmeta" id="vMeta"></div>
+      <div class="pbox" id="vContent"></div>
+      <div class="pacts">
+        <button class="pbtn" onclick="copyPaste()">Copiar</button>
+        <button class="pbtn" onclick="closeModal('mView')">Fechar</button>
+        <button class="pbtn pbtn-del" id="vDel" style="display:none" onclick="delPaste()">Deletar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="overlay" id="mProfile">
+  <div class="modal modal-lg">
+    <div class="mhd"><span class="mttl">PERFIL</span><button class="mx" onclick="closeModal('mProfile')">&#x2715;</button></div>
+    <div class="mbd">
+      <div class="prof-hd">
+        <div class="prof-av" id="profAv" onclick="triggerAv()">
+          <span id="profAvPh" style="font-size:32px">&#128100;</span>
+          <img id="profAvImg" style="display:none;width:80px;height:80px;object-fit:cover" alt="">
+        </div>
+        <div class="prof-info">
+          <h2 id="profName">--</h2>
+          <p id="profRole" style="margin-bottom:4px">--</p>
+          <p id="profJoined">--</p>
+          <p style="font-size:11px;color:var(--dm);margin-top:4px">Clique na foto para trocar</p>
+        </div>
+      </div>
+      <input type="file" id="avInput" accept="image/*" style="display:none" onchange="onAvUpload(event)">
+      <div class="prof-tabs">
+        <span class="ptab active" onclick="showProfTab('edit')">Editar Perfil</span>
+        <span class="ptab" onclick="showProfTab('sec')">Seguranca</span>
+        <span class="ptab" onclick="showProfTab('my')">Meus Pastes</span>
+      </div>
+      <div id="ptab-edit">
+        <div class="fg"><label class="fl">Nome de exibicao</label><input class="fi" id="pDispName" type="text" placeholder="Como quer ser chamado"></div>
+        <div class="fg"><label class="fl">Bio</label><textarea class="fta" id="pBio" placeholder="Sobre voce..." style="min-height:80px"></textarea></div>
+        <div class="fg"><label class="fl">Website</label><input class="fi" id="pWebsite" type="text" placeholder="https://..."></div>
+        <button class="mbtn" onclick="saveProfile()">Salvar Perfil</button>
+      </div>
+      <div id="ptab-sec" style="display:none">
+        <div class="fg"><label class="fl">Senha atual</label><input class="fi" id="secOld" type="password" placeholder="Senha atual"></div>
+        <div class="fg"><label class="fl">Nova senha</label><input class="fi" id="secNew" type="password" placeholder="min 8 chars"></div>
+        <div class="fg"><label class="fl">Confirmar nova senha</label><input class="fi" id="secNew2" type="password" placeholder="repita"></div>
+        <div style="font-size:11px;margin-bottom:10px" id="secPwStr"></div>
+        <button class="mbtn" onclick="changePass()">Alterar Senha</button>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--b1)">
+          <div class="sec-label" style="margin-bottom:8px">Sessao atual</div>
+          <div style="font-size:12px;color:var(--dm)">IP: <span style="font-family:monospace;color:var(--tx)" id="secIP">--</span></div>
+          <div style="font-size:12px;color:var(--dm);margin-top:4px">Inicio: <span style="color:var(--tx)" id="secSessStart">--</span></div>
+        </div>
+      </div>
+      <div id="ptab-my" style="display:none">
+        <div class="tbl-wrap" style="margin-bottom:0">
+          <table><thead><tr><th>Titulo</th><th>Cat</th><th>Views</th><th>Data</th><th>Acao</th></tr></thead><tbody id="myPastesBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var ADMIN_USER = 'zion';
+var ADMIN_PASS = 'cpzinkiller';
+var ADMIN_TFA  = '666999';
+var MAX_ATTEMPTS = 5;
+var LOCKOUT_SEC  = 300;
+var RATE_LIMIT   = 5;
+var RATE_WINDOW  = 60000;
+var MIN_PASS     = 8;
+var SESS_TIMEOUT = 3600000;
+
+var currentUser  = null;
+var sessStart    = null;
+var allPastes    = [];
+var filterCat    = 'all';
+var searchQ      = '';
+var viewingId    = null;
+var pending2FA   = null;
+var lockTimerInt = null;
+
+var sec = {
+  attempts: {},
+  ipAttempts: {},
+  rateMap: {},
+  bannedIPs: [],
+  lockedUntil: 0
+};
+
+var PINNED = [
+  {id:'pin1', title:'Bem-vindo ao HoodBin', category:'info', author:'zion', role:'admin',
+   views:1241, comments:0, date:'Jan 1, 2026', ownedBy:null,
+   content:'Bem-vindo ao HoodBin.\n\nCategorias:\n- Dox: informacoes sobre pessoas\n- Informacao: dados, registros, logs\n\nRegras:\n1. Use com responsabilidade.\n2. Sem spam.\n3. Admin pode deletar qualquer conteudo.'}
+];
+
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function fmtDate(ts) {
+  var d = new Date(ts);
+  return MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+function fmtTime(ts) {
+  var d = new Date(ts);
+  var h = String(d.getHours()).padStart(2,'0');
+  var m = String(d.getMinutes()).padStart(2,'0');
+  var s = String(d.getSeconds()).padStart(2,'0');
+  return h + ':' + m + ':' + s;
+}
+
+function esc(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function san(s) {
+  return String(s||'')
+    .replace(/javascript:/gi,'')
+    .replace(/on[a-z]+=+/gi,'')
+    .trim();
+}
+
+function badge(c) {
+  if (c === 'dox') return '<span class="badge b-dox">Dox</span>';
+  if (c === 'info') return '<span class="badge b-inf">Info</span>';
+  return '<span class="badge b-inf">' + esc(c) + '</span>';
+}
+
+function uCls(r) {
+  if (r === 'admin') return 'u-adm';
+  if (r === 'vip') return 'u-v';
+  if (r === 'anon') return 'u-a';
+  return 'u-m';
+}
+
+// STORAGE
+async function store(key, val) {
+  var s = JSON.stringify(val);
+  try { await window.storage.set(key, s); } catch(e) { localStorage.setItem(key, s); }
+}
+async function retrieve(key, def) {
+  try {
+    var r = await window.storage.get(key);
+    return (r && r.value) ? JSON.parse(r.value) : def;
+  } catch(e) {
+    try {
+      var s = localStorage.getItem(key);
+      return s ? JSON.parse(s) : def;
+    } catch(e2) { return def; }
+  }
+}
+
+// SIM IP
+function getSimIP() {
+  var ip = sessionStorage.getItem('_sip');
+  if (!ip) {
+    var r = function() { return Math.floor(Math.random()*254)+1; };
+    ip = r() + '.' + r() + '.' + r() + '.' + r();
+    sessionStorage.setItem('_sip', ip);
+  }
+  return ip;
+}
+var SIM_IP = getSimIP();
+
+// LOG
+async function logEv(type, user, detail) {
+  var logs = await retrieve('hb:logs', []);
+  logs.unshift({ts: Date.now(), type: type, user: user||'anon', ip: SIM_IP, detail: detail||''});
+  if (logs.length > 500) logs.length = 500;
+  await store('hb:logs', logs);
+  if (document.getElementById('pg-admin').style.display !== 'none') renderLog();
+}
+
+async function renderLog() {
+  var logs = await retrieve('hb:logs', []);
+  var clsMap = {login:'lr-login', fail:'lr-fail', ban:'lr-ban', paste:'lr-paste', register:'lr-reg'};
+  var lblMap = {login:'LOGIN', fail:'FALHA', ban:'BAN', paste:'PASTE', register:'REG', logout:'LOGOUT', admin:'ADMIN'};
+  if (!logs.length) {
+    document.getElementById('logBody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--dm)">Sem eventos.</td></tr>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < logs.length; i++) {
+    var l = logs[i];
+    var cls = clsMap[l.type] || '';
+    var lbl = lblMap[l.type] || l.type;
+    html += '<tr class="' + cls + '">';
+    html += '<td class="td-d">' + fmtTime(l.ts) + '</td>';
+    html += '<td style="font-size:11px">' + lbl + '</td>';
+    html += '<td class="td-u u-m">' + esc(l.user) + '</td>';
+    html += '<td style="font-family:monospace;font-size:11px;color:var(--dm)">' + l.ip + '</td>';
+    html += '<td style="font-size:11px;color:var(--dm)">' + esc(l.detail) + '</td>';
+    html += '</tr>';
+  }
+  document.getElementById('logBody').innerHTML = html;
+}
+
+async function clearLog() {
+  await store('hb:logs', []);
+  renderLog();
+  toast('Log limpo.', 'ok');
+}
+
+// LOCKOUT
+function isLocked() { return sec.lockedUntil > Date.now(); }
+
+function triggerLock() {
+  sec.lockedUntil = Date.now() + LOCKOUT_SEC * 1000;
+  showLock();
+}
+
+function showLock() {
+  if (!isLocked()) return;
+  document.getElementById('lockScreen').classList.remove('gone');
+  updLockTimer();
+  lockTimerInt = setInterval(function() {
+    if (!isLocked()) {
+      clearInterval(lockTimerInt);
+      document.getElementById('lockScreen').classList.add('gone');
+    } else { updLockTimer(); }
+  }, 1000);
+}
+
+function updLockTimer() {
+  var r = Math.max(0, Math.ceil((sec.lockedUntil - Date.now()) / 1000));
+  var m = String(Math.floor(r/60)).padStart(2,'0');
+  var s = String(r%60).padStart(2,'0');
+  document.getElementById('lockTimer').textContent = m + ':' + s;
+}
+
+// LOGIN TRACKING
+function trackFail(username) {
+  if (!sec.attempts[username]) sec.attempts[username] = 0;
+  sec.attempts[username]++;
+  if (!sec.ipAttempts[SIM_IP]) sec.ipAttempts[SIM_IP] = 0;
+  sec.ipAttempts[SIM_IP]++;
+  var a = sec.attempts[username];
+  var ia = sec.ipAttempts[SIM_IP];
+  var el = document.getElementById('loginInfo');
+  if (a >= MAX_ATTEMPTS || ia >= MAX_ATTEMPTS) {
+    triggerLock();
+    logEv('ban', username, 'Auto-ban: ' + a + ' tentativas');
+    return true;
+  }
+  el.textContent = 'Tentativas restantes: ' + (MAX_ATTEMPTS - a);
+  el.style.color = a >= 3 ? 'var(--ac)' : 'var(--dm)';
+  return false;
+}
+
+function resetAttempts(username) {
+  sec.attempts[username] = 0;
+  sec.ipAttempts[SIM_IP] = 0;
+  document.getElementById('loginInfo').textContent = '';
+}
+
+// IP BAN
+function isIPBanned() { return sec.bannedIPs.indexOf(SIM_IP) !== -1; }
+
+async function banIPManual() {
+  var ip = document.getElementById('banIpInput').value.trim();
+  if (!ip) { toast('Digite um IP', 'err'); return; }
+  if (sec.bannedIPs.indexOf(ip) === -1) {
+    sec.bannedIPs.push(ip);
+    await store('hb:bannedIPs', sec.bannedIPs);
+    logEv('ban', (currentUser ? currentUser.name : 'admin'), 'IP banido: ' + ip);
+    toast('IP ' + ip + ' banido.', 'err');
+    renderAdmin();
+  }
+  document.getElementById('banIpInput').value = '';
+}
+
+async function unbanIP(ip) {
+  sec.bannedIPs = sec.bannedIPs.filter(function(x) { return x !== ip; });
+  await store('hb:bannedIPs', sec.bannedIPs);
+  logEv('admin', (currentUser ? currentUser.name : 'admin'), 'IP desbanido: ' + ip);
+  toast('IP ' + ip + ' desbanido.', 'ok');
+  renderAdmin();
+}
+
+// RATE LIMIT
+function checkRate() {
+  var key = currentUser ? currentUser.name : SIM_IP;
+  var now = Date.now();
+  if (!sec.rateMap[key]) sec.rateMap[key] = [];
+  sec.rateMap[key] = sec.rateMap[key].filter(function(t) { return now - t < RATE_WINDOW; });
+  if (sec.rateMap[key].length >= RATE_LIMIT) return false;
+  sec.rateMap[key].push(now);
+  return true;
+}
+
+// SESSION
+function checkSess() {
+  if (!currentUser || !sessStart) return;
+  if (Date.now() - sessStart > SESS_TIMEOUT) {
+    toast('Sessao expirada.', 'err');
+    doLogout(true);
+  }
+}
+setInterval(checkSess, 30000);
+
+// PASSWORD STRENGTH
+function pwStr(pw) {
+  var s = 0;
+  if (pw.length >= 8) s++;
+  if (pw.length >= 12) s++;
+  if (/[A-Z]/.test(pw)) s++;
+  if (/[0-9]/.test(pw)) s++;
+  if (/[^A-Za-z0-9]/.test(pw)) s++;
+  if (s <= 1) return {l:'Muito fraca', c:'var(--ac)'};
+  if (s === 2) return {l:'Fraca', c:'var(--or)'};
+  if (s === 3) return {l:'Media', c:'var(--yw)'};
+  if (s === 4) return {l:'Forte', c:'#88cc44'};
+  return {l:'Muito forte', c:'var(--gn)'};
+}
+
+document.getElementById('rPass').addEventListener('input', function() {
+  var r = pwStr(this.value);
+  var el = document.getElementById('pwStr');
+  el.textContent = this.value ? 'Forca: ' + r.l : '';
+  el.style.color = r.c;
+});
+
+document.getElementById('secNew').addEventListener('input', function() {
+  var r = pwStr(this.value);
+  var el = document.getElementById('secPwStr');
+  el.textContent = this.value ? 'Forca: ' + r.l : '';
+  el.style.color = r.c;
+});
+
+// 2FA
+function tfaInput(el, idx) {
+  if (el.value.length === 1 && idx < 5) {
+    document.querySelectorAll('#tfaDigits input')[idx+1].focus();
+  }
+}
+
+function verifyTFA() {
+  var inputs = document.querySelectorAll('#tfaDigits input');
+  var code = '';
+  for (var i = 0; i < inputs.length; i++) code += inputs[i].value;
+  if (code === ADMIN_TFA) {
+    currentUser = {name: ADMIN_USER, role: 'admin'};
+    sessStart = Date.now();
+    pending2FA = null;
+    closeModal('mLogin');
+    updateUI();
+    logEv('admin', ADMIN_USER, '2FA OK - admin logado');
+    toast('Bem-vindo, ' + ADMIN_USER + '!', 'ok');
+    document.getElementById('tfaBlock').style.display = 'none';
+    document.getElementById('loginBlock').style.display = '';
+    var inp = document.querySelectorAll('#tfaDigits input');
+    for (var j = 0; j < inp.length; j++) inp[j].value = '';
+  } else {
+    document.getElementById('tfaHint').textContent = 'Codigo incorreto';
+    document.getElementById('tfaHint').style.color = 'var(--ac)';
+    var inp2 = document.querySelectorAll('#tfaDigits input');
+    for (var k = 0; k < inp2.length; k++) inp2[k].value = '';
+    inp2[0].focus();
+    logEv('fail', pending2FA, 'Codigo 2FA errado');
+  }
+}
+
+function cancelTFA() {
+  pending2FA = null;
+  document.getElementById('tfaBlock').style.display = 'none';
+  document.getElementById('loginBlock').style.display = '';
+}
+
+// AUTH
+async function doLogin() {
+  if (isLocked()) { showLock(); return; }
+  if (isIPBanned()) { toast('Acesso bloqueado.', 'err'); return; }
+  var name = san(document.getElementById('lUser').value.trim());
+  var pass = document.getElementById('lPass').value;
+  if (!name || !pass) { toast('Preencha todos os campos', 'err'); return; }
+
+  if (name === ADMIN_USER) {
+    if (pass !== ADMIN_PASS) {
+      var locked = trackFail(name);
+      if (!locked) { toast('Senha incorreta.', 'err'); logEv('fail', name, 'Senha admin errada'); }
+      return;
+    }
+    pending2FA = name;
+    document.getElementById('loginBlock').style.display = 'none';
+    document.getElementById('tfaBlock').style.display = '';
+    document.getElementById('tfaHint').textContent = '6 digitos';
+    document.getElementById('tfaHint').style.color = 'var(--dm)';
+    document.querySelectorAll('#tfaDigits input')[0].focus();
+    return;
+  }
+
+  var users = await retrieve('hb:users', {});
+  if (!users[name]) {
+    trackFail(name);
+    logEv('fail', name, 'Usuario nao encontrado');
+    toast('Usuario nao encontrado.', 'err');
+    return;
+  }
+  if (users[name].banned) {
+    logEv('fail', name, 'Login - conta banida');
+    toast('Conta suspensa.', 'err');
+    return;
+  }
+  if (users[name].pass !== pass) {
+    var lk = trackFail(name);
+    if (!lk) { logEv('fail', name, 'Senha errada'); toast('Senha incorreta.', 'err'); }
+    return;
+  }
+
+  resetAttempts(name);
+  currentUser = {name: name, role: users[name].role || 'member'};
+  sessStart = Date.now();
+  closeModal('mLogin');
+  await loadAvatar();
+  updateUI();
+  logEv('login', name, 'Login OK - IP: ' + SIM_IP);
+  toast('Bem-vindo, ' + name + '!', 'ok');
+}
+
+async function doRegister() {
+  if (isLocked()) { showLock(); return; }
+  if (isIPBanned()) { toast('Acesso bloqueado.', 'err'); return; }
+  var name  = san(document.getElementById('rUser').value.trim());
+  var email = san(document.getElementById('rEmail').value.trim());
+  var pass  = document.getElementById('rPass').value;
+  var pass2 = document.getElementById('rPass2').value;
+  if (!name||!email||!pass) { toast('Preencha todos os campos', 'err'); return; }
+  if (pass.length < MIN_PASS) { toast('Senha minima: ' + MIN_PASS + ' chars', 'err'); return; }
+  if (pass !== pass2) { toast('Senhas nao coincidem', 'err'); return; }
+  if (!/\S+@\S+\.\S+/.test(email)) { toast('Email invalido', 'err'); return; }
+  if (!/^[a-zA-Z0-9_]{3,24}$/.test(name)) { toast('Username: 3-24 chars, letras/numeros/_', 'err'); return; }
+  if (name === ADMIN_USER) { toast('Username nao disponivel', 'err'); return; }
+  if (pwStr(pass).l === 'Muito fraca') { toast('Senha muito fraca', 'err'); return; }
+  var users = await retrieve('hb:users', {});
+  if (users[name]) { toast('Username ja em uso', 'err'); return; }
+  users[name] = {pass:pass, email:email, role:'member', joined:fmtDate(Date.now()), banned:false, loginFails:0, dispName:'', bio:'', website:''};
+  await store('hb:users', users);
+  currentUser = {name:name, role:'member'};
+  sessStart = Date.now();
+  closeModal('mReg');
+  updateUI();
+  logEv('register', name, 'Cadastro - IP: ' + SIM_IP);
+  toast('Conta criada! Bem-vindo, ' + name + '!', 'ok');
+}
+
+function doLogout(silent) {
+  if (currentUser && !silent) logEv('logout', currentUser.name, 'Logout - IP: ' + SIM_IP);
+  currentUser = null;
+  sessStart = null;
+  updateUI();
+  if (!silent) toast('Sessao encerrada.', 'ok');
+}
+
+function updateUI() {
+  var loggedIn = !!currentUser;
+  document.getElementById('authBtns').style.display = loggedIn ? 'none' : '';
+  document.getElementById('uArea').style.display = loggedIn ? 'flex' : 'none';
+  if (loggedIn) {
+    var tag = currentUser.role === 'admin' ? ' <span class="adm-tag">Admin</span>' : '';
+    document.getElementById('uName').innerHTML = esc(currentUser.name) + tag;
+    document.getElementById('uAvTx').textContent = currentUser.name[0].toUpperCase();
+  }
+  var isAdmin = loggedIn && currentUser.role === 'admin';
+  document.getElementById('na-adm').style.display = isAdmin ? '' : 'none';
+  document.getElementById('uploadHint').style.display = isAdmin ? 'block' : 'none';
+  document.getElementById('logoEdit').style.display = isAdmin ? 'flex' : 'none';
+}
+
+// PROFILE
+async function openProfile() {
+  if (!currentUser) return;
+  var users = await retrieve('hb:users', {});
+  var u = currentUser.role === 'admin'
+    ? {dispName:'zion', bio:'Administrador', website:'', email:'admin@hoodbin', joined:'Jan 2026', role:'admin'}
+    : (users[currentUser.name] || {});
+  document.getElementById('profName').textContent  = currentUser.name;
+  document.getElementById('profRole').textContent  = (currentUser.role||'member').toUpperCase();
+  document.getElementById('profJoined').textContent = u.joined ? 'Entrou em ' + u.joined : '';
+  document.getElementById('pDispName').value = u.dispName || '';
+  document.getElementById('pBio').value      = u.bio || '';
+  document.getElementById('pWebsite').value  = u.website || '';
+  document.getElementById('secIP').textContent = SIM_IP;
+  document.getElementById('secSessStart').textContent = sessStart ? fmtTime(sessStart) : '--';
+  var avData = await retrieve('hb:av:' + currentUser.name, null);
+  if (avData) {
+    document.getElementById('profAvImg').src = avData;
+    document.getElementById('profAvImg').style.display = 'block';
+    document.getElementById('profAvPh').style.display  = 'none';
+  } else {
+    document.getElementById('profAvImg').style.display = 'none';
+    document.getElementById('profAvPh').style.display  = '';
+  }
+  await renderMyPastes();
+  showProfTab('edit');
+  openModal('mProfile');
+}
+
+function showProfTab(tab) {
+  var tabs = ['edit','sec','my'];
+  for (var i = 0; i < tabs.length; i++) {
+    document.getElementById('ptab-' + tabs[i]).style.display = tabs[i] === tab ? '' : 'none';
+  }
+  var els = document.querySelectorAll('.ptab');
+  for (var j = 0; j < els.length; j++) {
+    els[j].classList.toggle('active', j === tabs.indexOf(tab));
+  }
+}
+
+async function saveProfile() {
+  if (!currentUser || currentUser.role === 'admin') { toast('Salvo!', 'ok'); return; }
+  var users = await retrieve('hb:users', {});
+  if (!users[currentUser.name]) return;
+  users[currentUser.name].dispName = san(document.getElementById('pDispName').value.trim());
+  users[currentUser.name].bio      = san(document.getElementById('pBio').value.trim());
+  users[currentUser.name].website  = san(document.getElementById('pWebsite').value.trim());
+  await store('hb:users', users);
+  logEv('admin', currentUser.name, 'Perfil atualizado');
+  toast('Perfil salvo!', 'ok');
+}
+
+async function changePass() {
+  if (!currentUser) return;
+  var oldP  = document.getElementById('secOld').value;
+  var newP  = document.getElementById('secNew').value;
+  var newP2 = document.getElementById('secNew2').value;
+  if (!oldP || !newP) { toast('Preencha todos os campos', 'err'); return; }
+  if (newP !== newP2) { toast('Senhas nao coincidem', 'err'); return; }
+  if (newP.length < MIN_PASS) { toast('Minimo ' + MIN_PASS + ' chars', 'err'); return; }
+  if (currentUser.role === 'admin') { toast('Admin: altere no codigo.', 'err'); return; }
+  var users = await retrieve('hb:users', {});
+  if (!users[currentUser.name]) return;
+  if (users[currentUser.name].pass !== oldP) { toast('Senha atual incorreta', 'err'); return; }
+  users[currentUser.name].pass = newP;
+  await store('hb:users', users);
+  logEv('admin', currentUser.name, 'Senha alterada');
+  toast('Senha alterada!', 'ok');
+  document.getElementById('secOld').value  = '';
+  document.getElementById('secNew').value  = '';
+  document.getElementById('secNew2').value = '';
+}
+
+function triggerAv() {
+  if (!currentUser) return;
+  document.getElementById('avInput').click();
+}
+
+function onAvUpload(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2097152) { toast('Imagem muito grande (max 2MB)', 'err'); return; }
+  var reader = new FileReader();
+  reader.onload = async function(ev) {
+    var data = ev.target.result;
+    await store('hb:av:' + currentUser.name, data);
+    document.getElementById('profAvImg').src = data;
+    document.getElementById('profAvImg').style.display = 'block';
+    document.getElementById('profAvPh').style.display  = 'none';
+    await loadAvatar();
+    toast('Foto atualizada!', 'ok');
+    logEv('admin', currentUser.name, 'Avatar atualizado');
+  };
+  reader.readAsDataURL(file);
+}
+
+async function loadAvatar() {
+  if (!currentUser) return;
+  var avData = await retrieve('hb:av:' + currentUser.name, null);
+  var avEl = document.getElementById('uAv');
+  if (avData) {
+    avEl.innerHTML = '<img src="' + avData + '" style="width:28px;height:28px;object-fit:cover">';
+  } else {
+    avEl.innerHTML = '<span id="uAvTx">' + currentUser.name[0].toUpperCase() + '</span>';
+  }
+}
+
+async function renderMyPastes() {
+  if (!currentUser) return;
+  var myP = allPastes.filter(function(p) { return p.ownedBy === currentUser.name; }).reverse();
+  if (!myP.length) {
+    document.getElementById('myPastesBody').innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--dm)">Sem pastes.</td></tr>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < myP.length; i++) {
+    var p = myP[i];
+    html += '<tr>';
+    html += '<td class="td-t" onclick="openPaste(\'' + p.id + '\');closeModal(\'mProfile\')">' + esc(p.title) + '</td>';
+    html += '<td>' + badge(p.category) + '</td>';
+    html += '<td class="td-n">' + (p.views||0) + '</td>';
+    html += '<td class="td-d">' + p.date + '</td>';
+    html += '<td><button class="pbtn pbtn-del" onclick="delMyPaste(\'' + p.id + '\')">' + 'Del</button></td>';
+    html += '</tr>';
+  }
+  document.getElementById('myPastesBody').innerHTML = html;
+}
+
+async function delMyPaste(id) {
+  var idx = -1;
+  for (var i = 0; i < allPastes.length; i++) {
+    if (allPastes[i].id === id && allPastes[i].ownedBy === currentUser.name) { idx = i; break; }
+  }
+  if (idx === -1) return;
+  allPastes.splice(idx, 1);
+  await store('hb:pastes', allPastes);
+  await renderMyPastes();
+  render();
+  toast('Paste deletado.', 'ok');
+}
+
+// LOGO
+function triggerLogo() {
+  if (!currentUser || currentUser.role !== 'admin') return;
+  document.getElementById('logoInput').click();
+}
+function onLogoUpload(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var reader = new FileReader();
+  reader.onload = async function(ev) {
+    await store('hb:logo', ev.target.result);
+    applyLogo(ev.target.result);
+    toast('Logo atualizado!', 'ok');
+  };
+  reader.readAsDataURL(file);
+}
+function applyLogo(src) {
+  var img = document.getElementById('logoImg');
+  var ph  = document.getElementById('logoPh');
+  if (src) { img.src=src; img.style.display='block'; ph.style.display='none'; }
+  else { img.style.display='none'; ph.style.display='flex'; }
+}
+
+// ADMIN ACTIONS
+async function admBanUser(name) {
+  if (!confirm('Banir "' + name + '"?')) return;
+  var users = await retrieve('hb:users', {});
+  if (!users[name]) return;
+  users[name].banned = true;
+  await store('hb:users', users);
+  logEv('ban', currentUser.name, 'Usuario banido: ' + name);
+  toast(name + ' banido.', 'err');
+  renderAdmin();
+}
+async function admUnbanUser(name) {
+  var users = await retrieve('hb:users', {});
+  if (!users[name]) return;
+  users[name].banned = false; users[name].loginFails = 0;
+  await store('hb:users', users);
+  logEv('admin', currentUser.name, 'Usuario desbanido: ' + name);
+  toast(name + ' desbanido.', 'ok');
+  renderAdmin();
+}
+async function admSetVip(name) {
+  var users = await retrieve('hb:users', {});
+  if (!users[name]) return;
+  users[name].role = users[name].role === 'vip' ? 'member' : 'vip';
+  await store('hb:users', users);
+  toast(name + ' -> ' + users[name].role, 'ok');
+  renderAdmin();
+}
+async function admDelPaste(id) {
+  if (!confirm('Deletar paste?')) return;
+  var idx = -1;
+  for (var i = 0; i < allPastes.length; i++) { if (allPastes[i].id === id) { idx = i; break; } }
+  if (idx === -1) return;
+  var t = allPastes[idx].title;
+  allPastes.splice(idx, 1);
+  await store('hb:pastes', allPastes);
+  logEv('admin', currentUser.name, 'Paste deletado: ' + t);
+  render(); renderAdmin();
+  toast('Paste deletado.', 'ok');
+}
+async function admDelUser(name) {
+  if (!confirm('Deletar "' + name + '" permanentemente?')) return;
+  var users = await retrieve('hb:users', {});
+  delete users[name];
+  await store('hb:users', users);
+  logEv('admin', currentUser.name, 'Usuario deletado: ' + name);
+  toast('Usuario "' + name + '" deletado.', 'ok');
+  renderAdmin();
+}
+async function saveSiteName() {
+  var val = san(document.getElementById('admSiteName').value.trim());
+  if (!val) return;
+  await store('hb:sitename', val);
+  applySiteName(val);
+  toast('Nome atualizado!', 'ok');
+}
+
+// RENDER
+function tableRow(p, pin) {
+  var rl = p.role === 'admin' ? ' <span class="adm-tag">Admin</span>' :
+           p.role === 'vip'   ? ' <span style="font-size:10px;color:var(--yw)">[VIP]</span>' : '';
+  var row = '<tr class="' + (pin ? 'pin-row' : '') + '" onclick="openPaste(\x27' + p.id + '\x27)">';
+  row += '<td><span class="td-t">' + esc(p.title) + '</span>' + badge(p.category) + '</td>';
+  row += '<td class="td-n">' + (p.comments||0) + '</td>';
+  row += '<td class="td-n">' + (p.views||0) + '</td>';
+  row += '<td class="td-u ' + uCls(p.role) + '">' + esc(p.author) + rl + '</td>';
+  row += '<td class="td-d">' + p.date + '</td>';
+  row += '</tr>';
+  return row;
+}
+
+function render() {
+  var list = allPastes.slice().reverse();
+  if (filterCat !== 'all') list = list.filter(function(p) { return p.category === filterCat; });
+  if (searchQ) {
+    var q = searchQ.toLowerCase();
+    list = list.filter(function(p) { return p.title.toLowerCase().indexOf(q) !== -1 || (p.content||'').toLowerCase().indexOf(q) !== -1; });
+  }
+  document.getElementById('showN').textContent  = list.length;
+  document.getElementById('totalN').textContent = allPastes.length + PINNED.length;
+  var emptyHtml = '<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--dm)">Nenhum paste.</td></tr>';
+  var listHtml = '';
+  for (var i = 0; i < list.length; i++) listHtml += tableRow(list[i], false);
+  document.getElementById('listBody').innerHTML = listHtml || emptyHtml;
+  var pinHtml = '';
+  for (var j = 0; j < PINNED.length; j++) pinHtml += tableRow(PINNED[j], true);
+  document.getElementById('pinBody').innerHTML = pinHtml;
+  var pgs = ['&larr;','1','2','3','4','5','&rarr;'];
+  var pgsHtml = '';
+  for (var k = 0; k < pgs.length; k++) pgsHtml += '<button class="pn' + (pgs[k]==='1'?' cur':'') + '">' + pgs[k] + '</button>';
+  document.getElementById('pages').innerHTML = pgsHtml;
+}
+
+async function renderUsers() {
+  var users = await retrieve('hb:users', {});
+  var adminRow = '<tr><td class="td-u u-adm">zion <span class="adm-tag">Admin</span></td>';
+  adminRow += '<td><span class="badge b-dox" style="color:#8844cc;border-color:#2a1a3a">ADMIN</span></td>';
+  adminRow += '<td class="td-n">' + (allPastes.filter(function(p){return p.author==='zion';}).length + PINNED.length) + '</td>';
+  adminRow += '<td class="td-d">Jan 2026</td><td><span class="sbadge sb-ok">OK</span></td></tr>';
+  var rows = '';
+  var keys = Object.keys(users);
+  for (var i = 0; i < keys.length; i++) {
+    var name = keys[i];
+    var d = users[name];
+    var uc = uCls(d.role||'member');
+    var st = d.banned ? '<span class="sbadge sb-ban">BANIDO</span>' : '<span class="sbadge sb-ok">OK</span>';
+    rows += '<tr><td class="td-u ' + uc + '">' + esc(name) + '</td>';
+    rows += '<td><span class="badge b-inf">' + (d.role||'member').toUpperCase() + '</span></td>';
+    rows += '<td class="td-n">' + allPastes.filter(function(p){return p.author===name;}).length + '</td>';
+    rows += '<td class="td-d">' + (d.joined||'--') + '</td>';
+    rows += '<td>' + st + '</td></tr>';
+  }
+  document.getElementById('usersBody').innerHTML = adminRow + (rows || '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--dm)">Nenhum usuario.</td></tr>');
+}
+
+async function renderAdmin() {
+  var users = await retrieve('hb:users', {});
+  var banned = 0;
+  var ukeys = Object.keys(users);
+  for (var i = 0; i < ukeys.length; i++) { if (users[ukeys[i]].banned) banned++; }
+  document.getElementById('adm-total').textContent = allPastes.length;
+  document.getElementById('adm-users').textContent = ukeys.length + 1;
+  document.getElementById('adm-banned').textContent = banned;
+  document.getElementById('adm-onl').textContent = document.getElementById('onl').textContent;
+
+  var ipHtml = '';
+  for (var j = 0; j < sec.bannedIPs.length; j++) {
+    var ip = sec.bannedIPs[j];
+    ipHtml += '<span style="margin-right:12px">' + ip + ' <span class="tlink" onclick="unbanIP(\x27' + ip + '\x27)">[desbanir]</span></span><br>';
+  }
+  document.getElementById('bannedIPsList').innerHTML = ipHtml || '<span style="color:var(--dm)">Nenhum IP banido.</span>';
+
+  var pr = '';
+  var plist = allPastes.slice().reverse();
+  for (var k = 0; k < plist.length; k++) {
+    var p = plist[k];
+    pr += '<tr>';
+    pr += '<td class="td-t">' + esc(p.title) + '</td>';
+    pr += '<td class="td-u ' + uCls(p.role) + '">' + esc(p.author) + '</td>';
+    pr += '<td class="td-d">' + p.date + '</td>';
+    pr += '<td><button class="pbtn pbtn-del" onclick="admDelPaste(\x27' + p.id + '\x27)">Del</button></td>';
+    pr += '</tr>';
+  }
+  document.getElementById('admPastesBody').innerHTML = pr || '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--dm)">Sem pastes.</td></tr>';
+
+  var ur = '';
+  for (var m = 0; m < ukeys.length; m++) {
+    var uname = ukeys[m];
+    var ud = users[uname];
+    var uc2 = uCls(ud.role||'member');
+    var banBtn = ud.banned
+      ? '<button class="pbtn" onclick="admUnbanUser(\x27' + uname + '\x27)">Desbanir</button>'
+      : '<button class="pbtn pbtn-del" onclick="admBanUser(\x27' + uname + '\x27)">Banir</button>';
+    var vipBtn = '<button class="pbtn" style="margin-left:4px" onclick="admSetVip(\x27' + uname + '\x27)">' + (ud.role==='vip'?'Rem VIP':'Set VIP') + '</button>';
+    var delBtn = '<button class="pbtn pbtn-del" style="margin-left:4px" onclick="admDelUser(\x27' + uname + '\x27)">Del</button>';
+    var st2 = ud.banned ? '<span class="sbadge sb-ban">BANIDO</span>' : '<span class="sbadge sb-ok">OK</span>';
+    ur += '<tr>';
+    ur += '<td class="td-u ' + uc2 + '">' + esc(uname) + '</td>';
+    ur += '<td style="font-size:11px;color:var(--dm)">' + (ud.email||'--') + '</td>';
+    ur += '<td>' + st2 + '</td>';
+    ur += '<td class="td-n">' + (ud.loginFails||0) + '</td>';
+    ur += '<td class="td-d">' + (ud.joined||'--') + '</td>';
+    ur += '<td>' + banBtn + vipBtn + delBtn + '</td>';
+    ur += '</tr>';
+  }
+  document.getElementById('admUsersBody').innerHTML = ur || '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--dm)">Sem usuarios.</td></tr>';
+  renderLog();
+}
+
+// PASTE
+function openAdd() { openModal('mAdd'); }
+
+function updChar() {
+  var n = document.getElementById('aContent').value.length;
+  var el = document.getElementById('charct');
+  el.textContent = n.toLocaleString() + ' / 50,000';
+  el.className = 'charct' + (n > 45000 ? ' w' : '') + (n >= 50000 ? ' o' : '');
+}
+
+async function submitPaste() {
+  if (isIPBanned()) { toast('Acesso bloqueado.', 'err'); return; }
+  if (!checkRate()) { toast('Limite: ' + RATE_LIMIT + ' pastes por minuto.', 'err'); return; }
+  var title   = san(document.getElementById('aTitle').value.trim());
+  var cat     = document.getElementById('aCat').value;
+  var content = san(document.getElementById('aContent').value.trim());
+  var anon    = document.getElementById('aAnon').checked;
+  if (!title)   { toast('Digite um titulo', 'err'); return; }
+  if (!content) { toast('Conteudo vazio', 'err'); return; }
+  var author  = (anon || !currentUser) ? 'Anonymous' : currentUser.name;
+  var role    = (anon || !currentUser) ? 'anon' : currentUser.role;
+  var ownedBy = (anon || !currentUser) ? null : currentUser.name;
+  var id = 'p' + Date.now() + Math.random().toString(36).slice(2,5);
+  var paste = {id:id, title:title, category:cat, content:content, author:author, role:role,
+               views:0, comments:0, date:fmtDate(Date.now()), ts:Date.now(), ownedBy:ownedBy, ip:SIM_IP};
+  allPastes.push(paste);
+  await store('hb:pastes', allPastes);
+  logEv('paste', author, 'Paste: "' + title + '" [' + cat + ']');
+  document.getElementById('aTitle').value   = '';
+  document.getElementById('aContent').value = '';
+  document.getElementById('aAnon').checked  = true;
+  updChar();
+  closeModal('mAdd');
+  goHome();
+  toast('Paste publicado!', 'ok');
+}
+
+async function openPaste(id) {
+  var p = null;
+  for (var i = 0; i < PINNED.length; i++) { if (PINNED[i].id === id) { p = PINNED[i]; break; } }
+  if (!p) { for (var j = 0; j < allPastes.length; j++) { if (allPastes[j].id === id) { p = allPastes[j]; break; } } }
+  if (!p) return;
+  var isPin = false;
+  for (var k = 0; k < PINNED.length; k++) { if (PINNED[k].id === id) { isPin = true; break; } }
+  if (!isPin) { p.views = (p.views||0) + 1; await store('hb:pastes', allPastes); }
+  viewingId = id;
+  document.getElementById('vTitle').textContent = p.title;
+  var rl = p.role === 'admin' ? ' <span class="adm-tag">Admin</span>' : '';
+  document.getElementById('vMeta').innerHTML =
+    '<div><span class="mk">Categoria</span><span class="mv">' + badge(p.category) + '</span></div>' +
+    '<div><span class="mk">Autor</span><span class="mv td-u ' + uCls(p.role) + '">' + esc(p.author) + rl + '</span></div>' +
+    '<div><span class="mk">Views</span><span class="mv">' + (p.views||0) + '</span></div>' +
+    '<div><span class="mk">Data</span><span class="mv">' + p.date + '</span></div>' +
+    '<div><span class="mk">Tamanho</span><span class="mv">' + (p.content||'').length.toLocaleString() + ' chars</span></div>';
+  document.getElementById('vContent').textContent = p.content || '(empty)';
+  var canDel = currentUser && (currentUser.role === 'admin' || p.ownedBy === currentUser.name);
+  document.getElementById('vDel').style.display = (canDel && !isPin) ? '' : 'none';
+  render();
+  openModal('mView');
+}
+
+async function delPaste() {
+  if (!viewingId) return;
+  var idx = -1;
+  for (var i = 0; i < allPastes.length; i++) { if (allPastes[i].id === viewingId) { idx = i; break; } }
+  if (idx === -1) { toast('Nao pode deletar pinned', 'err'); return; }
+  var p = allPastes[idx];
+  if (!currentUser || (currentUser.role !== 'admin' && p.ownedBy !== currentUser.name)) { toast('Sem permissao', 'err'); return; }
+  logEv('admin', currentUser.name, 'Paste deletado: "' + p.title + '"');
+  allPastes.splice(idx, 1);
+  await store('hb:pastes', allPastes);
+  closeModal('mView');
+  render();
+  toast('Paste deletado.', 'ok');
+}
+
+function copyPaste() {
+  navigator.clipboard.writeText(document.getElementById('vContent').textContent).then(function() { toast('Copiado!', 'ok'); });
+}
+
+// MISC
+function applySiteName(name) {
+  document.title = name;
+  document.querySelector('.topbar-logo').textContent = name;
+  document.getElementById('siteName').textContent = name;
+}
+
+function goHome() {
+  document.getElementById('pg-home').style.display   = '';
+  document.getElementById('pg-users').style.display  = 'none';
+  document.getElementById('pg-admin').style.display  = 'none';
+  var navs = document.querySelectorAll('.tnav');
+  for (var i = 0; i < navs.length; i++) navs[i].classList.remove('active');
+  document.getElementById('na-home').classList.add('active');
+  render();
+}
+
+function goUsers() {
+  document.getElementById('pg-home').style.display   = 'none';
+  document.getElementById('pg-users').style.display  = '';
+  document.getElementById('pg-admin').style.display  = 'none';
+  var navs = document.querySelectorAll('.tnav');
+  for (var i = 0; i < navs.length; i++) navs[i].classList.remove('active');
+  document.getElementById('na-users').classList.add('active');
+  renderUsers();
+}
+
+function goAdmin() {
+  document.getElementById('pg-home').style.display   = 'none';
+  document.getElementById('pg-users').style.display  = 'none';
+  document.getElementById('pg-admin').style.display  = '';
+  var navs = document.querySelectorAll('.tnav');
+  for (var i = 0; i < navs.length; i++) navs[i].classList.remove('active');
+  document.getElementById('na-adm').classList.add('active');
+  renderAdmin();
+}
+
+function setCat(c) {
+  filterCat = c;
+  var cats = document.querySelectorAll('.cat');
+  for (var i = 0; i < cats.length; i++) cats[i].classList.toggle('active', cats[i].getAttribute('data-c') === c);
+  render();
+}
+
+function doSearch() { searchQ = document.getElementById('srch').value.trim(); render(); }
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function swModal(a, b) { closeModal(a); setTimeout(function() { openModal(b); }, 130); }
+
+var overlays = document.querySelectorAll('.overlay');
+for (var oi = 0; oi < overlays.length; oi++) {
+  overlays[oi].addEventListener('click', (function(el) {
+    return function(e) { if (e.target === el) el.classList.remove('open'); };
+  })(overlays[oi]));
+}
+
+function toast(msg, type) {
+  var el = document.createElement('div');
+  el.className = 'toast' + (type ? ' ' + type : '');
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(function() { el.remove(); }, 3200);
+}
+
+function updateOnline() {
+  var n = 180 + Math.floor(Math.random() * 120);
+  document.getElementById('onl').textContent = n;
+  try { document.getElementById('adm-onl').textContent = n; } catch(e) {}
+}
+updateOnline();
+setInterval(updateOnline, 9000);
+
+// INIT
+(async function() {
+  allPastes = await retrieve('hb:pastes', []);
+  var logo = await retrieve('hb:logo', null);
+  var sn   = await retrieve('hb:sitename', null);
+  sec.bannedIPs = await retrieve('hb:bannedIPs', []);
+  if (logo) applyLogo(logo);
+  if (sn) { applySiteName(sn); document.getElementById('admSiteName').value = sn; }
+  if (isLocked()) showLock();
+  render();
+})();
+</script>
+</body>
+</html>
